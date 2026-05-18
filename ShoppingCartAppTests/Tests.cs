@@ -9,6 +9,9 @@ namespace ShoppingCartAppTests
         public void Constructor_ValidArguments()
         {
             var item = new CartItem("Apple", 1.50, 3);
+            if (String.IsNullOrEmpty(item.Name)) throw new ArgumentException();
+            if (0 >= item.UnitPrice) throw new ArgumentException();
+            if (0 >= item.Quantity) throw new ArgumentException();
             Assert.AreEqual("Apple", item.Name);
             Assert.AreEqual(1.50, item.UnitPrice);
             Assert.AreEqual(3, item.Quantity);
