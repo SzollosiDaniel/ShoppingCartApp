@@ -31,6 +31,7 @@ namespace ShoppingCartAppTests
         public void UpdateQuantity_ValidValue()
         {
             var item = new CartItem("Milk", 1.20, 1);
+            if (0 >= item.Quantity) throw new ArgumentException();
             item.UpdateQuantity(5);
             Assert.AreEqual(5, item.Quantity);
         }
@@ -52,7 +53,12 @@ namespace ShoppingCartAppTests
         public void AddItem_NewItem()
         {
             var cart = new ShoppingCart();
-            cart.AddItem("Apple", 1.00, 2);
+            var item = new CartItem("Apple", 1.00, 2);
+            if (String.IsNullOrEmpty(item.Name)) throw new ArgumentException();
+            if (0 >= item.UnitPrice) throw new ArgumentException();
+            if (0 >= item.Quantity) throw new ArgumentException();
+            cart.AddItem(item.Name, item.UnitPrice, item.Quantity);
+
             Assert.AreEqual(1, cart.GetItemCount());
         }
         // TODO: ugyanolyan nevű item hozzáadása, mennyiséget növel annál az adott item-nél (nincs új item)
