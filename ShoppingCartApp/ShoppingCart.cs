@@ -2,7 +2,7 @@ namespace ShoppingCartApp
 {
     public class ShoppingCart
     {
-        private readonly List<CartItem> _items;
+        public readonly List<CartItem> _items;
 
         public ShoppingCart()
         {
@@ -12,34 +12,55 @@ namespace ShoppingCartApp
         // Ha az item neve már szerepel (kis-nagybetű független), növeli a mennyiségét
         public void AddItem(string name, double unitPrice, int quantity)
         {
-            throw new NotImplementedException();
+            foreach (var item in _items)
+            {
+                if (item.Name == name)
+                {
+                    item.UpdateQuantity(item.Quantity + 1);
+                }
+            }
         }
 
         // true ha megtalálta és törölte, false ha nem szerepelt
         public bool RemoveItem(string name)
         {
-            throw new NotImplementedException();
+            bool idk = _items.FindIndex(x => x.Name == name) != null;
+            if (idk)
+            {
+                _items.RemoveAt(_items.FindIndex(x => x.Name == name));
+                return true;
+            }
+            else
+                return false;
+            
+            
+
         }
 
         public int GetItemCount()
         {
-            throw new NotImplementedException();
+            return _items.Count;
         }
 
         // Összeg = minden item (UnitPrice * Quantity) összege
         public decimal GetTotal()
         {
-            throw new NotImplementedException();
+            decimal total = 0;
+            foreach (var item in _items)
+            {
+                total += Convert.ToDecimal(item.UnitPrice * item.Quantity);
+            }
+            return total;
         }
 
         public IReadOnlyList<CartItem> GetItems()
         {
-            throw new NotImplementedException();
+            return _items;
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            _items.Clear();
         }
     }
 }
