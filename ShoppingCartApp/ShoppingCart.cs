@@ -17,24 +17,24 @@ namespace ShoppingCartApp
                 if (item.Name == name)
                 {
                     item.UpdateQuantity(item.Quantity + 1);
+                    return;
                 }
             }
+            _items.Add(new CartItem(name, unitPrice, quantity));
         }
 
         // true ha megtalálta és törölte, false ha nem szerepelt
         public bool RemoveItem(string name)
         {
-            bool idk = _items.FindIndex(x => x.Name == name) != null;
-            if (idk)
+            foreach (var item in _items)
             {
-                _items.RemoveAt(_items.FindIndex(x => x.Name == name));
-                return true;
+                if (item.Name == name)
+                {
+                    _items.Remove(item);
+                    return true;
+                }
             }
-            else
-                return false;
-            
-            
-
+            return false;
         }
 
         public int GetItemCount()

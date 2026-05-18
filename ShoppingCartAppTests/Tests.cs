@@ -9,12 +9,12 @@ namespace ShoppingCartAppTests
         public void Constructor_ValidArguments()
         {
             var item = new CartItem("Apple", 1.50, 3);
-            if (String.IsNullOrEmpty(item.Name)) throw new ArgumentException();
-            if (0 >= item.UnitPrice) throw new ArgumentException();
-            if (0 >= item.Quantity) throw new ArgumentException();
             Assert.AreEqual("Apple", item.Name);
             Assert.AreEqual(1.50, item.UnitPrice);
             Assert.AreEqual(3, item.Quantity);
+            Assert.ThrowsException<ArgumentException>(() => new CartItem("", 1, 1));
+            Assert.ThrowsException<ArgumentException>(() => new CartItem("asd", 0, 1));
+            Assert.ThrowsException<ArgumentException>(() => new CartItem("asd", 1, 0));
         }
         // TODO: null/üres name -> ArgumentException
         // TODO: unitPrice <= 0 -> ArgumentException
@@ -31,9 +31,9 @@ namespace ShoppingCartAppTests
         public void UpdateQuantity_ValidValue()
         {
             var item = new CartItem("Milk", 1.20, 1);
-            if (0 >= item.Quantity) throw new ArgumentException();
             item.UpdateQuantity(5);
             Assert.AreEqual(5, item.Quantity);
+            Assert.ThrowsException<ArgumentException>(() => item.UpdateQuantity(-5));
         }
         // TODO: quantity <= 0 -> ArgumentException
     }
@@ -58,7 +58,8 @@ namespace ShoppingCartAppTests
             if (0 >= item.UnitPrice) throw new ArgumentException();
             if (0 >= item.Quantity) throw new ArgumentException();
             cart.AddItem(item.Name, item.UnitPrice, item.Quantity);
-
+            Assert.AreEqual(1, cart.GetItemCount());
+            cart.AddItem(item.Name, item.UnitPrice, item.Quantity);
             Assert.AreEqual(1, cart.GetItemCount());
         }
         // TODO: ugyanolyan nevű item hozzáadása, mennyiséget növel annál az adott item-nél (nincs új item)
@@ -85,6 +86,8 @@ namespace ShoppingCartAppTests
             cart.AddItem("Apple", 1.00, 3);  // 3.00
             cart.AddItem("Bread", 2.50, 2);  // 5.00
             Assert.AreEqual(8.00m, cart.GetTotal());
+            cart.RemoveItem("Apple");
+            Assert.AreEqual(5.00m, cart.GetTotal());
         }
         // TODO: üres kosár -> 0
         // TODO: item törlése után helyes-e az összeg
