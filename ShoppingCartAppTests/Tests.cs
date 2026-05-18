@@ -105,6 +105,9 @@ namespace ShoppingCartAppTests
         {
             var discount = new Discount();
             Assert.AreEqual(180, discount.ApplyPercentage(200, 10));
+            Assert.AreEqual(200, discount.ApplyPercentage(200, 0));
+            Assert.AreEqual(0, discount.ApplyPercentage(200, 100));
+            Assert.ThrowsException<ArgumentException>(() => discount.ApplyPercentage(200, 150));
         }
         // TODO: 0% -> változatlan összeg
         // TODO: 100% -> 0
@@ -115,6 +118,8 @@ namespace ShoppingCartAppTests
         {
             var discount = new Discount();
             Assert.AreEqual(75, discount.ApplyFixed(100, 25));
+            Assert.AreEqual(0, discount.ApplyFixed(50, 80));
+            Assert.ThrowsException<ArgumentException>(() => discount.ApplyFixed(100, -5));
         }
         // TODO: kedvezmény > total -> 0 (nem negatív)
         // TODO: negatív discountAmount -> ArgumentException
@@ -124,6 +129,8 @@ namespace ShoppingCartAppTests
         {
             var discount = new Discount();
             Assert.IsTrue(discount.IsValid(15));
+            Assert.IsFalse(discount.IsValid(0));
+            Assert.IsFalse(discount.IsValid(-5));
         }
         // TODO: 0 -> false
         // TODO: negatív -> false
